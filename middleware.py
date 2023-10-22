@@ -1,5 +1,4 @@
 from flask import request
-import logging
 
 def log_requests_and_responses(app):
     @app.before_request
