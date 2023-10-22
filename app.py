@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import logging
 from middleware import log_requests_and_responses
+from config import *
+from bmi_calculator import get_bmi
 
 app = Flask(__name__)
 
@@ -21,10 +23,31 @@ def hello_world():
 
 @app.route('/bmi', methods=['POST'])
 def create_item():
-    data = request.get_json()
-    # if isinstance(value, int):
-    print(f'data ==> {data}')
-    return jsonify(data), 201
+    age = height = weight = 0
+    try:
+      data = request.get_json()
+    except:
+        data = {}
+    # print(f'data ==> {data}')
+    if not data:
+        return jsonify(error_respose_json), 400
+    
+    age = data.get("age")
+    height = data.get("height")
+    weight = data.get("weight")
+
+    if not isinstance(age, (int, float)) or age <= 0:
+        return jsonify(age_filed_error_respose_json), 400
+    
+    elif not isinstance(height, (int, float)) or height <= 0:
+        return jsonify(height_filed_error_respose_json), 400
+    
+    elif not isinstance(weight, (int, float)) or weight <= 0:
+        return jsonify(weight_filed_error_respose_json), 400
+    
+    bmi, bmi_text = get_bmi(age, weight, height)
+    return_response = {"BMI":bmi, "message":bmi_text}
+    return jsonify(return_response), 200
 
 
 if __name__ == '__main__':

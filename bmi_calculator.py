@@ -35,3 +35,11 @@ def calculate_bmi_with_age(bmi, age):
             return "Overweight"
         else:
             return "Obese"
+
+def get_bmi(age, weight_kg, height_cm):
+    bmi = calculate_bmi(weight_kg, height_cm)
+    bmi_text = calculate_bmi_with_age(bmi, age)
+    return bmi, bmi_text
+
+
+# print(get_bmi(18, 65, 100))
